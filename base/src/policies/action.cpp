@@ -34,6 +34,7 @@ REGISTER_CONFIGURABLE(ActionProbabilityPolicy)
 
 void ActionPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo ActionPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("sigma", "Standard deviation of exploration distribution", sigma_, CRP::Configuration));
   config->push_back(CRP("decay_rate", "Multiplicative decay factor per episode", decay_rate_, CRP::Configuration));
   config->push_back(CRP("decay_min", "Minimum decay (sigma_min = sigma*decay_min)", decay_min_, CRP::Configuration));
@@ -47,6 +48,7 @@ void ActionPolicy::request(ConfigurationRequest *config)
 
 void ActionPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo ActionPolicy::configure(Configuration &config):" << std::endl;
   projector_ = (Projector*)config["projector"].ptr();
   representation_ = (Representation*)config["representation"].ptr();
   
@@ -72,12 +74,14 @@ void ActionPolicy::configure(Configuration &config)
 
 void ActionPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo ActionPolicy::reconfigure(const Configuration &config)" << std::endl;
   if (config.has("action") && config["action"].str() == "reset")
     decay_ = 1;
 }
 
 void ActionPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo ActionPolicy::act(double time, const Observation &in, Action *out)" << std::endl;
   if (time == 0.)
     decay_ = fmax(decay_*decay_rate_, decay_min_);
   return act(in, out);
@@ -85,6 +89,7 @@ void ActionPolicy::act(double time, const Observation &in, Action *out)
 
 void ActionPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo ActionPolicy::act(const Observation &in, Action *out) const" << std::endl;
   ProjectionPtr p = projector_->project(in);
   representation_->read(p, &out->v);
   out->type = atGreedy;
@@ -110,6 +115,7 @@ void ActionPolicy::act(const Observation &in, Action *out) const
 
 void ActionProbabilityPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo ActionProbabilityPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("discretizer", "discretizer", "Action discretizer", discretizer_));
   config->push_back(CRP("projector", "projector.pair", "Projects observation-action pairs onto representation space", projector_));
   config->push_back(CRP("representation", "representation.value/action", "Action-probability representation", representation_));
@@ -117,6 +123,7 @@ void ActionProbabilityPolicy::request(ConfigurationRequest *config)
 
 void ActionProbabilityPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo ActionProbabilityPolicy::configure(Configuration &config):" << std::endl;
   discretizer_ = (Discretizer*)config["discretizer"].ptr();
   
   projector_ = (Projector*)config["projector"].ptr();
@@ -125,10 +132,12 @@ void ActionProbabilityPolicy::configure(Configuration &config)
 
 void ActionProbabilityPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo ActionProbabilityPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 void ActionProbabilityPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo ActionProbabilityPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   std::vector<Vector> variants;
   std::vector<ProjectionPtr> projections;
   
@@ -146,6 +155,7 @@ void ActionProbabilityPolicy::act(const Observation &in, Action *out) const
 
 void ActionProbabilityPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const
 {
+  std::cout << "rgo ActionProbabilityPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const:" << std::endl;
   std::vector<Vector> variants;
   std::vector<ProjectionPtr> projections;
   

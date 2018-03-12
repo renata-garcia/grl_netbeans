@@ -33,6 +33,7 @@ REGISTER_CONFIGURABLE(ParameterizedActionPolicy)
 
 void ParameterizedActionPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo ParameterizedActionPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("sigma", "Standard deviation of exploration distribution", sigma_, CRP::Configuration));
 
   config->push_back(CRP("output_min", "vector.action_min", "Lower limit on outputs", min_, CRP::System));
@@ -44,6 +45,7 @@ void ParameterizedActionPolicy::request(ConfigurationRequest *config)
 
 void ParameterizedActionPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo ParameterizedActionPolicy::configure(Configuration &config):" << std::endl;
   projector_ = (Projector*)config["projector"].ptr();
   representation_ = (ParameterizedRepresentation*)config["representation"].ptr();
   
@@ -60,10 +62,12 @@ void ParameterizedActionPolicy::configure(Configuration &config)
 
 void ParameterizedActionPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo ParameterizedActionPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 void ParameterizedActionPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo ParameterizedActionPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   ProjectionPtr p = projector_->project(in);
   representation_->read(p, &out->v);
   out->type = atGreedy;

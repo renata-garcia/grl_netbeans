@@ -33,12 +33,14 @@ REGISTER_CONFIGURABLE(BoundedQPolicy)
 
 void BoundedQPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo BoundedQPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("bound", "Maximum action delta", bound_));
   QPolicy::request(config);
 }
 
 void BoundedQPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo BoundedQPolicy::configure(Configuration &config):" << std::endl;
   QPolicy::configure(config);
   
   bound_ = config["bound"].v();
@@ -46,10 +48,12 @@ void BoundedQPolicy::configure(Configuration &config)
 
 void BoundedQPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo BoundedQPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 void BoundedQPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo BoundedQPolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   if (out->size())
   {
     LargeVector qvalues, filtered;
@@ -69,6 +73,7 @@ void BoundedQPolicy::act(double time, const Observation &in, Action *out)
 
 void BoundedQPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const
 {
+  std::cout << "rgo BoundedQPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const:" << std::endl;
   if (prev.size())
   {
     LargeVector qvalues, filtered, dist;
@@ -93,6 +98,7 @@ void BoundedQPolicy::distribution(const Observation &in, const Action &prev, Lar
  */
 void BoundedQPolicy::filter(const Vector &in, const Vector &prev_out, const LargeVector &qvalues, LargeVector *filtered, std::vector<size_t> *idx) const
 {
+  std::cout << "rgo BoundedQPolicy::filter(const Vector &in, const Vector &prev_out, const LargeVector &qvalues, LargeVector *filtered, std::vector<size_t> *idx) const:" << std::endl;
   if (prev_out.size() != bound_.size())
     throw bad_param("mapping/policy/value/q/bounded:bound");
     

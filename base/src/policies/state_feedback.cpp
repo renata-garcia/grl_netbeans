@@ -38,6 +38,7 @@ REGISTER_CONFIGURABLE(SampleFeedbackPolicy)
 
 void StateFeedbackPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo StateFeedbackPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("operating_state", "Operating state around which gains are defined", operating_state_));
   config->push_back(CRP("operating_action", "Operating action around which gains are defined", operating_action_));
   
@@ -49,6 +50,7 @@ void StateFeedbackPolicy::request(ConfigurationRequest *config)
 
 void StateFeedbackPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo StateFeedbackPolicy::configure(Configuration &config):" << std::endl;
   operating_state_ = config["operating_state"].v();
   if (!operating_state_.size())
     throw bad_param("policy/parameterized/state_feedback:operating_state");
@@ -75,10 +77,12 @@ void StateFeedbackPolicy::configure(Configuration &config)
 
 void StateFeedbackPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo StateFeedbackPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 StateFeedbackPolicy &StateFeedbackPolicy::copy(const Configurable &obj)
 {
+  std::cout << "rgo &StateFeedbackPolicy::copy(const Configurable &obj):" << std::endl;
   const StateFeedbackPolicy& sfp = dynamic_cast<const StateFeedbackPolicy&>(obj);
   
   gains_ = sfp.gains_;
@@ -88,6 +92,7 @@ StateFeedbackPolicy &StateFeedbackPolicy::copy(const Configurable &obj)
 
 void StateFeedbackPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo StateFeedbackPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   if (in.size() != operating_state_.size())
     throw bad_param("policy/parameterized/state_feedback:operating_state");
 
@@ -121,12 +126,14 @@ void StateFeedbackPolicy::act(const Observation &in, Action *out) const
 
 void SampleFeedbackPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo SampleFeedbackPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("output_min", "vector.action_min", "Lower action limit", min_, CRP::System));
   config->push_back(CRP("output_max", "vector.action_max", "Upper action limit", max_, CRP::System));
 }
 
 void SampleFeedbackPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo SampleFeedbackPolicy::configure(Configuration &config):" << std::endl;
   min_ = config["output_min"].v();
   max_ = config["output_max"].v();
   
@@ -136,10 +143,12 @@ void SampleFeedbackPolicy::configure(Configuration &config)
 
 void SampleFeedbackPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo SampleFeedbackPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 SampleFeedbackPolicy &SampleFeedbackPolicy::copy(const Configurable &obj)
 {
+  std::cout << "rgo &SampleFeedbackPolicy::copy(const Configurable &obj):" << std::endl;
   const SampleFeedbackPolicy& sfp = dynamic_cast<const SampleFeedbackPolicy&>(obj);
   
   samples_ = sfp.samples_;
@@ -149,6 +158,7 @@ SampleFeedbackPolicy &SampleFeedbackPolicy::copy(const Configurable &obj)
 
 void SampleFeedbackPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo SampleFeedbackPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   if (!samples_.size())
   {
     WARNING("Applying default action");
@@ -205,10 +215,12 @@ void SampleFeedbackPolicy::act(const Observation &in, Action *out) const
 
 void SampleFeedbackPolicy::clear()
 {
+  std::cout << "rgo SampleFeedbackPolicy::clear():" << std::endl;
   samples_.clear();
 }
 
 void SampleFeedbackPolicy::push(const Sample &sample)
 {
+  std::cout << "rgo SampleFeedbackPolicy::push(const Sample &sample):" << std::endl;
   samples_.push_back(sample);
 }

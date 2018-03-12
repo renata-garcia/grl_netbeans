@@ -33,20 +33,24 @@ REGISTER_CONFIGURABLE(FeedForwardPolicy)
 
 void FeedForwardPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo FeedForwardPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("controls", "mapping", "Maps time to controls", controls_, CRP::Configuration));
 }
 
 void FeedForwardPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo FeedForwardPolicy::configure(Configuration &config):" << std::endl;
   controls_ = (Mapping*)config["controls"].ptr();
 }
 
 void FeedForwardPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo FeedForwardPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 void FeedForwardPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo void FeedForwardPolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   controls_->read(VectorConstructor(time), &out->v);
   out->type = atGreedy;
 }

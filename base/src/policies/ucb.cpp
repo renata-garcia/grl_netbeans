@@ -33,6 +33,7 @@ REGISTER_CONFIGURABLE(UCBPolicy)
 
 void UCBPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo UCBPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
   config->push_back(CRP("projector", "projector.pair", "Projects observation-action pairs onto representation space", projector_));
   config->push_back(CRP("representation", "representation.value/action", "Q-value representation", representation_));
@@ -43,6 +44,7 @@ void UCBPolicy::request(ConfigurationRequest *config)
 
 void UCBPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo UCBPolicy::configure(Configuration &config):" << std::endl;
   discretizer_ = (Discretizer*)config["discretizer"].ptr();
   
   projector_ = (Projector*)config["projector"].ptr();
@@ -54,10 +56,12 @@ void UCBPolicy::configure(Configuration &config)
 
 void UCBPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo UCBPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 void UCBPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo UCBPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   std::vector<Vector> variants;
   discretizer_->options(in, &variants);
 
@@ -93,6 +97,7 @@ void UCBPolicy::act(const Observation &in, Action *out) const
 
 void UCBPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo UCBPolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   act(in, out);
   
   ProjectionPtr projection = projector_->project(in, *out);

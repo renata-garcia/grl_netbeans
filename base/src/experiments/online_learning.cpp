@@ -129,6 +129,7 @@ LargeVector OnlineLearningExperiment::run()
     
     for (size_t ss=0, tt=0; (!trials_ || tt < trials_) && (!steps_ || ss < steps_); ++tt)
     { 
+      std::cout << "rgo OnlineLearningExperiment::run(): tt(" << tt << ") trials(" << trials_ << ") ss (" << ss << ") steps(" << steps_ << ")" << std::endl;
       Observation obs;
       Action action;
       double reward, total_reward=0;
@@ -146,7 +147,10 @@ LargeVector OnlineLearningExperiment::run()
       agent->start(obs, &action);
       state_->set(obs.v);
       action_->set(action.v);
-
+      
+      std::cout << "rgo OnlineLearningExperiment::run(): agent(" << agent << ") state_(" << state_ <<
+              ") action_ (" << action_ << ") &action(" << &action << ") obs.v(" << obs.v << ") action.v (" << action.v << std::endl;
+      
       do
       {
         if (rate_)
@@ -162,6 +166,9 @@ LargeVector OnlineLearningExperiment::run()
         CRAWL(action << " - " << reward << " -> " << obs);
         
         total_reward += reward;
+        
+        std::cout << "rgo OnlineLearningExperiment::run(): action(" << action << ") reward(" << reward << ") obs(" << obs << ")" << std::endl;
+        std::cout << "rgo OnlineLearningExperiment::run(): tau(" << tau << ") total_reward (" << total_reward << ")" << std::endl;
 
         if (obs.size())
         {

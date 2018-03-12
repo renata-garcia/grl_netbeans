@@ -33,6 +33,7 @@ REGISTER_CONFIGURABLE(NoisePolicy)
 
 void NoisePolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo NoisePolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("sigma", "Standard deviation of Gaussian exploration distribution", sigma_, CRP::Configuration));
   config->push_back(CRP("theta", "Ornstein-Uhlenbeck friction term (1=pure Gaussian noise)", theta_, CRP::Configuration));
 
@@ -41,6 +42,7 @@ void NoisePolicy::request(ConfigurationRequest *config)
 
 void NoisePolicy::configure(Configuration &config)
 {
+  std::cout << "rgo NoisePolicy::configure(Configuration &config):" << std::endl;
   policy_ = (Policy*)config["policy"].ptr();
   
   sigma_ = config["sigma"].v();
@@ -49,10 +51,12 @@ void NoisePolicy::configure(Configuration &config)
 
 void NoisePolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo NoisePolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 void NoisePolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo NoisePolicy::act(const Observation &in, Action *out) const:" << std::endl;
   policy_->act(in, out);
   
   if (!sigma_.size())
@@ -71,6 +75,7 @@ void NoisePolicy::act(const Observation &in, Action *out) const
 
 void NoisePolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo NoisePolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   policy_->act(in, out);
   
   if (!sigma_.size())

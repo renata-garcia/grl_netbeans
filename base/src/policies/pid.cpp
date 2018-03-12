@@ -39,6 +39,7 @@ REGISTER_CONFIGURABLE(PIDTrajectoryPolicy)
 
 void PIDPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo PIDPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("setpoint", "Setpoint", setpoint_, CRP::Online));
   config->push_back(CRP("outputs", "int.action_dims", "Number of outputs", (int)outputs_, CRP::System, 1));
   
@@ -53,6 +54,7 @@ void PIDPolicy::request(ConfigurationRequest *config)
 
 void PIDPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo PIDPolicy::configure(Configuration &config):" << std::endl;
   action_min_ = config["action_min"].v();
   action_max_ = config["action_max"].v();
 
@@ -96,6 +98,7 @@ void PIDPolicy::configure(Configuration &config)
 
 void PIDPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo PIDPolicy::reconfigure(const Configuration &config):" << std::endl;
   if (config.has("action") && config["action"].str() == "reset")
   {
     ival_ = ConstantLargeVector(setpoint_.size()*outputs_, 0.);
@@ -104,6 +107,7 @@ void PIDPolicy::reconfigure(const Configuration &config)
 
 void PIDPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo PIDPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   out->v.resize(outputs_);
   out->type = atGreedy;
 
@@ -126,6 +130,7 @@ void PIDPolicy::act(const Observation &in, Action *out) const
 
 void PIDPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo PIDPolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   if (time == 0.)
   {
     // First action in episode, clear integrator
@@ -160,6 +165,7 @@ void PIDPolicy::act(double time, const Observation &in, Action *out)
 ////////////////////////////////////////////////
 void PIDTrajectoryPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo PIDTrajectoryPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("trajectory", "mapping", "Maps time to setpoints", trajectory_));
 
   config->push_back(CRP("inputs", "int.observation_dims", "Number of inputs", (int)inputs_, CRP::System, 1));
@@ -176,6 +182,7 @@ void PIDTrajectoryPolicy::request(ConfigurationRequest *config)
 
 void PIDTrajectoryPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo PIDTrajectoryPolicy::configure(Configuration &config):" << std::endl;
   action_min_ = config["action_min"].v();
   action_max_ = config["action_max"].v();
 
@@ -218,6 +225,7 @@ void PIDTrajectoryPolicy::configure(Configuration &config)
 
 void PIDTrajectoryPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo PIDTrajectoryPolicy::reconfigure(const Configuration &config):" << std::endl;
   if (config.has("action") && config["action"].str() == "reset")
   {
     ival_ = ConstantLargeVector(inputs_*outputs_, 0.);
@@ -226,6 +234,7 @@ void PIDTrajectoryPolicy::reconfigure(const Configuration &config)
 
 void PIDTrajectoryPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo PIDTrajectoryPolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   // Read current setpoint from the trajectory
   trajectory_->read(VectorConstructor(time), &setpoint_);
   

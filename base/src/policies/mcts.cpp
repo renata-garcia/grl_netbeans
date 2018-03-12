@@ -34,6 +34,7 @@ REGISTER_CONFIGURABLE(UCTPolicy)
 
 void MCTSPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo void void MCTSPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("model", "observation_model", "Observation model used for planning", model_));
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
   
@@ -47,6 +48,7 @@ void MCTSPolicy::request(ConfigurationRequest *config)
 
 void MCTSPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo MCTSPolicy::configure(Configuration &config):" << std::endl;
   model_ = (ObservationModel*)config["model"].ptr();
   discretizer_ = (Discretizer*)config["discretizer"].ptr();
 
@@ -61,6 +63,7 @@ void MCTSPolicy::configure(Configuration &config)
 
 void MCTSPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo MCTSPolicy::reconfigure(const Configuration &config):" << std::endl;
   config.get("epsilon", epsilon_);
   config.get("horizon", horizon_);
   config.get("budget", budget_);
@@ -68,6 +71,7 @@ void MCTSPolicy::reconfigure(const Configuration &config)
 
 void MCTSPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo MCTSPolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   // Clear tree at start of episode
   if (time == 0.)
   {

@@ -33,6 +33,7 @@ REGISTER_CONFIGURABLE(VPolicy)
 
 void VPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo VPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("gamma", "Discount rate", gamma_));
   
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
@@ -44,6 +45,7 @@ void VPolicy::request(ConfigurationRequest *config)
 
 void VPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo VPolicy::configure(Configuration &config):" << std::endl;
   gamma_ = config["gamma"];
 
   discretizer_ = (Discretizer*)config["discretizer"].ptr();
@@ -56,10 +58,12 @@ void VPolicy::configure(Configuration &config)
 
 void VPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo VPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 double VPolicy::value(const Observation &in) const
 {
+  std::cout << "rgo VPolicy::value(const Observation &in) const:" << std::endl;
   Vector v;
   representation_->read(projector_->project(in), &v);
   
@@ -71,6 +75,7 @@ double VPolicy::value(const Observation &in) const
 
 void VPolicy::values(const Observation &in, LargeVector *out) const
 {
+  std::cout << "rgo VPolicy::values(const Observation &in, LargeVector *out) const:" << std::endl;
   out->resize(discretizer_->size(in));
   
   size_t aa=0;
@@ -97,6 +102,7 @@ void VPolicy::values(const Observation &in, LargeVector *out) const
 
 void VPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo VPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   LargeVector v;
   ActionType at;
 
@@ -109,6 +115,7 @@ void VPolicy::act(const Observation &in, Action *out) const
 
 void VPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const
 {
+  std::cout << "rgo VPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const:" << std::endl;
   LargeVector v;
 
   values(in, &v);

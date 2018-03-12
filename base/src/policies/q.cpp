@@ -33,6 +33,7 @@ REGISTER_CONFIGURABLE(QPolicy)
 
 void QPolicy::request(ConfigurationRequest *config)
 {
+  std::cout << "rgo QPolicy::request(ConfigurationRequest *config):" << std::endl;
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
   config->push_back(CRP("projector", "projector.pair", "Projects observation-action pairs onto representation space", projector_));
   config->push_back(CRP("representation", "representation.value/action", "Action-value representation", representation_));
@@ -41,6 +42,7 @@ void QPolicy::request(ConfigurationRequest *config)
 
 void QPolicy::configure(Configuration &config)
 {
+  std::cout << "rgo QPolicy::configure(Configuration &config):" << std::endl;
   discretizer_ = (Discretizer*)config["discretizer"].ptr();
   
   projector_ = (Projector*)config["projector"].ptr();
@@ -50,10 +52,12 @@ void QPolicy::configure(Configuration &config)
 
 void QPolicy::reconfigure(const Configuration &config)
 {
+  std::cout << "rgo QPolicy::reconfigure(const Configuration &config):" << std::endl;
 }
 
 double QPolicy::value(const Observation &in) const
 {
+  std::cout << "rgo QPolicy::value(const Observation &in) const:" << std::endl;
   LargeVector qvalues, dist;
   double v=0;
   
@@ -62,7 +66,9 @@ double QPolicy::value(const Observation &in) const
   
   for (size_t ii=0; ii < dist.size(); ++ii)
     v += qvalues[ii]*dist[ii];
-    
+  
+  std::cout << "rgo in(" << in << "&qvalues(" << &qvalues << ") v (" << v << ")" << std::endl;
+  
   return v;
 }
 
@@ -73,6 +79,7 @@ double QPolicy::value(const Observation &in) const
  */
 void QPolicy::values(const Observation &in, LargeVector *out) const
 {
+  std::cout << "rgo QPolicy::values(const Observation &in, LargeVector *out) const:" << std::endl;
   // 'projections' contains list of neighbours around state 'in' and any possible action. Number of projections is equal to number of possible actions.
   std::vector<Vector> variants;
   std::vector<ProjectionPtr> projections;
@@ -88,6 +95,7 @@ void QPolicy::values(const Observation &in, LargeVector *out) const
 
 void QPolicy::act(const Observation &in, Action *out) const
 {
+  std::cout << "rgo QPolicy::act(const Observation &in, Action *out) const:" << std::endl;
   LargeVector qvalues;
   ActionType at;
   
@@ -100,6 +108,7 @@ void QPolicy::act(const Observation &in, Action *out) const
 
 void QPolicy::act(double time, const Observation &in, Action *out)
 {
+  std::cout << "rgo QPolicy::act(double time, const Observation &in, Action *out):" << std::endl;
   LargeVector qvalues;
   ActionType at;
 
@@ -112,6 +121,7 @@ void QPolicy::act(double time, const Observation &in, Action *out)
 
 void QPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const
 {
+  std::cout << "rgo QPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const:" << std::endl;
   LargeVector qvalues;
 
   values(in, &qvalues);

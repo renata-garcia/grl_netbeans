@@ -1,6 +1,7 @@
 experiment: 
   type: experiment/online_learning
   runs: 1
+  run_offset: 0
   trials: 0
   steps: 0
   rate: 0
@@ -43,11 +44,12 @@ experiment:
         output_max: []
       sampler: 
         type: sampler/epsilon_greedy
-        rand_max: 0
         epsilon: 0.05
+        decay_rate: 1
+        decay_min: 0
     predictor: 
       type: predictor/critic/sarsa
-      alpha: 0.2
+      alpha: 0.5
       gamma: 0.97
       lambda: 0.65
       projector: experiment/agent/policy/projector
@@ -63,7 +65,6 @@ experiment:
       representation: experiment/agent/policy/representation
       sampler: 
         type: sampler/greedy
-        rand_max: 0
   save_every: never
 visualizer: 
   type: visualizer/glut
