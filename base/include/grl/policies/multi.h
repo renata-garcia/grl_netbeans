@@ -1,11 +1,11 @@
-/** \file additive.h
- * \brief Additive representation header file.
+/** \file multi.h
+ * \brief Policy combiner header file.
  *
  * \author    Wouter Caarls <wouter@caarls.org>
- * \date      2015-11-15
+ * \date      2018-03-13
  *
  * \copyright \verbatim
- * Copyright (c) 2015, Wouter Caarls
+ * Copyright (c) 2018, Wouter Caarls
  * All rights reserved.
  *
  * This file is part of GRL, the Generic Reinforcement Learning library.
@@ -25,40 +25,43 @@
  * \endverbatim
  */
 
-#ifndef GRL_ADDITIVE_REPRESENTATION_H_
-#define GRL_ADDITIVE_REPRESENTATION_H_
+#ifndef GRL_MULTI_POLICY_H_
+#define GRL_MULTI_POLICY_H_
 
-#include <grl/representation.h>
+#include <grl/policy.h>
+#include <grl/discretizer.h>
 
 namespace grl
 {
 
-/// Linear combination of two representations
-class AdditiveRepresentation : public Representation
+/// Policy that combines two or more sub-policies using different strategies
+class MultiPolicy : public Policy
 {
   public:
-    TYPEINFO("representation/additive", "Linear combination of two representations")
+    TYPEINFO("mapping/policy/multi", "Combines multiple policies")
+    
+    enum CombinationStrategy {csAddProbabilities};
 
   protected:
-    TypedConfigurableList<Representation> representation_;
-    int learning_;
-    
+    std::string strategy_str_;
+    CombinationStrategy strategy_;
+    Discretizer *discretizer_;
+    TypedConfigurableList<Policy> policy_;
+
   public:
-    AdditiveRepresentation() : learning_(0)
-    {
-    }
-    
+    MultiPolicy() { }
+  
     // From Configurable
-    virtual void request(const std::string &role, ConfigurationRequest *config);
+    virtual void request(ConfigurationRequest *config);
     virtual void configure(Configuration &config);
     virtual void reconfigure(const Configuration &config);
-  
-    // From Representation
-    virtual double read(const ProjectionPtr &projection, Vector *result, Vector *stddev) const;
-    virtual void write(const ProjectionPtr projection, const Vector &target, const Vector &alpha);
-    virtual void update(const ProjectionPtr projection, const Vector &delta);
+
+    // From Policy
+    virtual void act(const Observation &in, Action *out) const;
+    virtual void act(double time, const Observation &in, Action *out);
+    virtual void distribution(const Observation &in, const Action &prev, LargeVector *out) const;
 };
 
 }
 
-#endif /* GRL_ADDITIVE_REPRESENTATION_H_ */
+#endif /* GRL_MULTI_POLICY_H_ */

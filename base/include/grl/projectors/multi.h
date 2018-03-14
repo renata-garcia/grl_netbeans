@@ -42,13 +42,10 @@ class MultiProjector : public Projector
   protected:
     int dim_;
     Vector memory_;
-    std::vector<Projector*> projector_;
+    TypedConfigurableList<Projector> projector_;
 
   public:
-    MultiProjector() : dim_(-1)
-    {
-      projector_.resize(2, NULL);
-    }
+    MultiProjector() : dim_(-1) { }
 
     // From Configurable
     virtual void request(const std::string &role, ConfigurationRequest *config);
@@ -56,7 +53,13 @@ class MultiProjector : public Projector
     virtual void reconfigure(const Configuration &config);
 
     // From Projector
-    virtual ProjectionLifetime lifetime() const { return std::max(projector_[0]->lifetime(), projector_[1]->lifetime()); }
+    virtual ProjectionLifetime lifetime() const
+    {
+      ProjectionLifetime result = projector_[0]->lifetime();
+      for (size_t ii=0; ii != projector_.size(); ++ii)
+        result = std::max(result, projector_[ii]->lifetime());
+      return result;
+    }
     virtual ProjectionPtr project(const Vector &in) const;
 };
 
